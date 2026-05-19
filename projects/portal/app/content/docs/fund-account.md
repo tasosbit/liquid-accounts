@@ -43,6 +43,8 @@ Bridging is powered by [Allbridge](https://allbridge.io/) and works in both dire
 
 </details>
 
+**Note:** Quote reflects prices at the time of request. Final output may slightly vary due to [AMM price impact](https://docs-core.allbridge.io/product/how-does-allbridge-core-work/fees#price-impact-from-pool-balances-not-a-fee).
+
 ## Option 2: Buy ALGO from an Exchange
 
 You can purchase ALGO on a centralized exchange and withdraw it directly to your derived Algorand address. ALGO is available on most major exchanges, including Binance, Coinbase, Kraken, and KuCoin.
