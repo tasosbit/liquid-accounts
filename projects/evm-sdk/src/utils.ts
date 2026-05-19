@@ -1,3 +1,8 @@
+/** Normalize an EVM address to lowercase hex without the 0x prefix. */
+export function normalizeAddress(evmAddress: string): string {
+  return evmAddress.startsWith("0x") ? evmAddress.slice(2).toLowerCase() : evmAddress.toLowerCase()
+}
+
 export function hexToBytes(hex: string): Uint8Array {
   const bytes = new Uint8Array(hex.length / 2)
   for (let i = 0; i < hex.length; i += 2) {

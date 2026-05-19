@@ -1,8 +1,8 @@
 import type { AlgorandClient } from "@algorandfoundation/algokit-utils"
 import algosdk from "algosdk"
-import { ALGO_X_EVM_LSIG_TEAL } from "./generated/teal"
+import { compileLsigForOwner } from "./lsig-compile"
 import { getEvmAddressFromProgram } from "./lsig-detect"
-import { SignTypedDataParams, buildTypedData, hexToBytes, parseEvmSignature } from "./utils"
+import { SignTypedDataParams, buildTypedData, normalizeAddress, parseEvmSignature } from "./utils"
 export {
   ALGORAND_CHAIN_ID,
   ALGORAND_CHAIN_ID_HEX,
@@ -20,32 +20,26 @@ export type { SignTypedDataParams } from "./utils"
 export { getEvmAddressFromProgram, isXChainLsigProgram } from "./lsig-detect"
 
 export class AlgoXEvmSdk {
-  private algorand: AlgorandClient
+  private algorand?: AlgorandClient
   private compiledCache = new Map<string, Uint8Array>()
 
-  constructor({ algorand }: { algorand: AlgorandClient }) {
+  constructor({ algorand }: { algorand?: AlgorandClient } = {}) {
     this.algorand = algorand
   }
 
-  private static normalizeAddress(evmAddress: string): string {
-    return evmAddress.startsWith("0x") ? evmAddress.slice(2).toLowerCase() : evmAddress.toLowerCase()
-  }
-
-  private async getCompiled(evmAddress: string): Promise<Uint8Array> {
-    const normalized = AlgoXEvmSdk.normalizeAddress(evmAddress)
-    if (!this.compiledCache.has(normalized)) {
-      const result = await this.algorand.app.compileTealTemplate(ALGO_X_EVM_LSIG_TEAL, {
-        TMPL_OWNER: hexToBytes(normalized),
-      })
-      this.compiledCache.set(normalized, result.compiledBase64ToBytes)
-      return result.compiledBase64ToBytes
+  private getCompiled(evmAddress: string): Uint8Array {
+    const normalized = normalizeAddress(evmAddress)
+    let cached = this.compiledCache.get(normalized)
+    if (!cached) {
+      cached = compileLsigForOwner(normalized)
+      this.compiledCache.set(normalized, cached)
     }
-    return this.compiledCache.get(normalized)!
+    return cached
   }
 
   /** Get Algorand address for a given EVM address (hex, with or without 0x prefix) */
   async getAddress({ evmAddress }: { evmAddress: string }): Promise<string> {
-    const compiled = await this.getCompiled(evmAddress)
+    const compiled = this.getCompiled(evmAddress)
     const lsig = new algosdk.LogicSigAccount(compiled, [])
     return lsig.address().toString()
   }
@@ -86,6 +80,9 @@ export class AlgoXEvmSdk {
     algorandAddress: string
     limit?: number
   }): Promise<`0x${string}` | null> {
+    if (!this.algorand) {
+      throw new Error("AlgoXEvmSdk: getEvmAddressFromAccount requires an AlgorandClient. Pass one to the constructor.")
+    }
     const indexer = this.algorand.client.indexer
     const result = await indexer
       .searchForTransactions()
@@ -175,7 +172,7 @@ export class AlgoXEvmSdk {
     signMessage?: (typedData: SignTypedDataParams) => Promise<string>
     signature?: string
   }): Promise<Uint8Array[]> {
-    const compiled = await this.getCompiled(evmAddress)
+    const compiled = this.getCompiled(evmAddress)
 
     let evmSig: string
     if (signature) {
@@ -220,7 +217,7 @@ export class AlgoXEvmSdk {
     evmAddress: string
     signMessage: (typedData: SignTypedDataParams) => Promise<string>
   }): Promise<{ addr: string; signer: algosdk.TransactionSigner }> {
-    const compiled = await this.getCompiled(evmAddress)
+    const compiled = this.getCompiled(evmAddress)
     const lsig = new algosdk.LogicSigAccount(compiled, [])
     const addr = lsig.address().toString()
 
