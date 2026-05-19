@@ -64,6 +64,7 @@ export function NetworkSwitcher() {
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-label={`Network: ${current.label}`}
         onClick={() => setOpen((v) => !v)}
         className={cn(
           "inline-flex h-9 items-center gap-1.5 rounded-md border border-input bg-background px-2.5 text-sm",
