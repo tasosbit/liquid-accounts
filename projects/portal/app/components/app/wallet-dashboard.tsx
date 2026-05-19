@@ -1,14 +1,19 @@
 import { useMemo, useState, useCallback } from "react"
 import { useWallet, useNetwork, NetworkId } from "@txnlab/use-wallet-react"
 import { useQueryClient, useIsFetching } from "@tanstack/react-query"
-import { useAccountInfo, useBridgeDialog, mapBridgeToPanelProps, useWalletUI } from "@txnlab/use-wallet-ui-react"
+import {
+  useAccountInfo,
+  useBridgeDialog,
+  mapBridgeToPanelProps,
+  useWalletUI,
+  useAssetRegistry,
+} from "@txnlab/use-wallet-ui-react"
 import { getOpenInEntries, type Network } from "@d13co/open-in"
 import {
   ManagePanel,
   useSendPanel,
   useReceivePanel,
   useSwapPanel,
-  useAssetRegistry,
   useAssets,
   usePeraAssetData,
   type WalletAdapter,
@@ -50,7 +55,7 @@ export function WalletDashboard() {
   const assetIds = useMemo(() => allHoldings.map((a) => String(a.assetId)), [allHoldings])
   const optedInAssetIds = useMemo(() => new Set(allHoldings.map((a) => Number(a.assetId))), [allHoldings])
 
-  const registry = useAssetRegistry(algodClient, activeNetwork)
+  const registry = useAssetRegistry()
 
   const onTransactionSuccess = useCallback(() => {
     void queryClient.invalidateQueries({ queryKey: ["account-info"] })
