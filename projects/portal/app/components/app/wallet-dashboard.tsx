@@ -1,4 +1,5 @@
 import { useMemo, useState, useCallback } from "react"
+import algosdk from "algosdk"
 import { useWallet, useNetwork, NetworkId } from "@txnlab/use-wallet-react"
 import { useQueryClient, useIsFetching } from "@tanstack/react-query"
 import { useAccountInfo, useBridgeDialog, mapBridgeToPanelProps, useWalletUI } from "@txnlab/use-wallet-ui-react"
@@ -50,7 +51,18 @@ export function WalletDashboard() {
   const assetIds = useMemo(() => allHoldings.map((a) => String(a.assetId)), [allHoldings])
   const optedInAssetIds = useMemo(() => new Set(allHoldings.map((a) => Number(a.assetId))), [allHoldings])
 
-  const registry = useAssetRegistry(algodClient, activeNetwork)
+  const indexerClient = useMemo(() => {
+    if (activeNetwork === "localnet")
+      return new algosdk.Indexer(
+        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "http://localhost",
+        8980,
+      )
+    if (activeNetwork === "testnet") return new algosdk.Indexer("", "https://testnet-idx.4160.nodely.dev", "")
+    return undefined
+  }, [activeNetwork])
+
+  const registry = useAssetRegistry(algodClient, activeNetwork, indexerClient)
 
   const onTransactionSuccess = useCallback(() => {
     void queryClient.invalidateQueries({ queryKey: ["account-info"] })
