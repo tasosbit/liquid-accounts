@@ -4,6 +4,9 @@ import { useWallet, WalletId } from "@txnlab/use-wallet-react"
 import { ConnectWalletButton } from "@txnlab/use-wallet-ui-react"
 import { WalletProviders, wagmiConfig } from "./wallet-providers"
 import { WalletDashboard } from "./wallet-dashboard"
+import { NetworkSwitcher } from "./network-switcher"
+import { Header } from "~/components/layout/header"
+import { Footer } from "~/components/layout/footer"
 import { UseAlgorandWith } from "~/components/use-algorand-with"
 import { Button } from "../ui/button"
 
@@ -121,5 +124,13 @@ export default function WalletApp() {
     return <WalletAppContent />
   }, [resolved, onResolved])
 
-  return <WalletProviders>{content}</WalletProviders>
+  return (
+    <WalletProviders>
+      <div className="flex min-h-screen flex-col">
+        <Header extra={<NetworkSwitcher />} />
+        <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-8">{content}</main>
+        <Footer />
+      </div>
+    </WalletProviders>
+  )
 }

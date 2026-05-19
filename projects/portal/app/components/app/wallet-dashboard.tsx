@@ -19,6 +19,7 @@ import {
 export function WalletDashboard() {
   const { activeAddress, activeWallet, activeWalletAccounts, algodClient, signTransactions } = useWallet()
   const { activeNetwork } = useNetwork()
+  const isMainnet = activeNetwork === "mainnet"
   const queryClient = useQueryClient()
   const isFetching = useIsFetching()
   const { bridge, enableBridge } = useBridgeDialog()
@@ -115,9 +116,10 @@ export function WalletDashboard() {
 
   const bridgeProps = useMemo(() => {
     if (!bridge.isAvailable) return undefined
+    if (!isMainnet) return undefined
     const { onBack: _, ...rest } = mapBridgeToPanelProps(bridge)
     return rest
-  }, [bridge])
+  }, [bridge, isMainnet])
 
   const evmAddress = useMemo(
     () => (activeWallet?.activeAccount?.metadata?.evmAddress as string) ?? null,
@@ -185,7 +187,7 @@ export function WalletDashboard() {
     <div>
       <ManagePanel
         wideBreakpoint={800}
-        onBridgeEnter={enableBridge}
+        onBridgeEnter={isMainnet ? enableBridge : undefined}
         displayBalance={displayBalance}
         showAvailableBalance={showAvailable}
         onToggleBalance={toggleBalance}
@@ -197,15 +199,19 @@ export function WalletDashboard() {
           peraData,
           fetchPeraData: fetchPeraFor,
         }}
-        swap={{
-          ...swap,
-          accountAssets: assetHoldings.length > 0 ? assetHoldings : undefined,
-          totalBalance,
-          availableBalance,
-          explorerUrl: getTxExplorerUrl(swap.txId),
-          peraData,
-          fetchPeraData: fetchPeraFor,
-        }}
+        swap={
+          isMainnet
+            ? {
+                ...swap,
+                accountAssets: assetHoldings.length > 0 ? assetHoldings : undefined,
+                totalBalance,
+                availableBalance,
+                explorerUrl: getTxExplorerUrl(swap.txId),
+                peraData,
+                fetchPeraData: fetchPeraFor,
+              }
+            : undefined
+        }
         bridge={bridgeProps}
         assets={assetHoldings.length > 0 ? assetHoldings : undefined}
         totalBalance={totalBalance}
