@@ -112,8 +112,8 @@ export class AlgoXEvmSdk {
    * Sign one or more algosdk Transactions with the EVM lsig using EIP-712 typed data.
    *
    * The payload signed by the EVM wallet is:
-   * - The group ID if `txns[0].group` is set
-   * - The transaction ID otherwise (only valid when `txns` has exactly one element)
+   * - The group ID when signing an atomic group with 2+ transactions
+   * - The transaction ID otherwise (`txns` has exactly one element, regardless of .group existence)
    *
    * @param evmAddress - hex EVM address (with or without 0x prefix)
    * @param txns - algosdk Transaction(s) to sign (must already have group ID assigned if grouped)
