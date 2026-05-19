@@ -1,5 +1,5 @@
 import { useMemo, useState, useCallback } from "react"
-import { useWallet, useNetwork } from "@txnlab/use-wallet-react"
+import { useWallet, useNetwork, NetworkId } from "@txnlab/use-wallet-react"
 import { useQueryClient, useIsFetching } from "@tanstack/react-query"
 import { useAccountInfo, useBridgeDialog, mapBridgeToPanelProps, useWalletUI } from "@txnlab/use-wallet-ui-react"
 import { getOpenInEntries, type Network } from "@d13co/open-in"
@@ -19,7 +19,7 @@ import {
 export function WalletDashboard() {
   const { activeAddress, activeWallet, activeWalletAccounts, algodClient, signTransactions } = useWallet()
   const { activeNetwork } = useNetwork()
-  const isMainnet = activeNetwork === "mainnet"
+  const isMainnet = activeNetwork === NetworkId.MAINNET
   const queryClient = useQueryClient()
   const isFetching = useIsFetching()
   const { bridge, enableBridge } = useBridgeDialog()
