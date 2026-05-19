@@ -47,7 +47,7 @@ This is the same atomic-group behavior native Algorand wallets use - the only di
 
 Some transactions can drain your account or transfer signing authority - they require **special attention**:
 
-- [Re-key](https://dev.algorand.co/concepts/accounts/rekeying/#rekey-to-transaction): permanently transfers signing authority of your account to another key or program. **This invalidates your private key's signing authority** and should only be done if you fully understand the implications. If in doubt, reject rekeying transactions.
+- [Re-key](https://dev.algorand.co/concepts/accounts/rekeying/): permanently transfers signing authority of your account to another key or program. **This invalidates your private key's signing authority** and should only be done if you fully understand the implications. If in doubt, reject rekeying transactions.
 - [Close account](https://dev.algorand.co/concepts/transactions/types/#close-an-account): sends all your ALGO holdings to another address.
 - [Asset opt-out](https://dev.algorand.co/concepts/transactions/types/#opt-out-of-an-asset): sends all your asset balance to another address.
 
