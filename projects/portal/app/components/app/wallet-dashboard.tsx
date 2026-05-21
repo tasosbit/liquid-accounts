@@ -17,6 +17,10 @@ import {
   type AssetLookupClient,
 } from "@d13co/algo-x-evm-ui"
 
+const localnetIndexerToken = (import.meta.env.VITE_INDEXER_LOCALNET_TOKEN as string | undefined) || "a".repeat(64)
+const localnetIndexerUrl = (import.meta.env.VITE_INDEXER_LOCALNET_URL as string | undefined) || "http://localhost"
+const localnetIndexerPort = (import.meta.env.VITE_INDEXER_LOCALNET_PORT as string | undefined) || 8980
+
 export function WalletDashboard() {
   const { activeAddress, activeWallet, activeWalletAccounts, algodClient, signTransactions } = useWallet()
   const { activeNetwork } = useNetwork()
@@ -53,11 +57,7 @@ export function WalletDashboard() {
 
   const indexerClient = useMemo(() => {
     if (activeNetwork === NetworkId.LOCALNET)
-      return new algosdk.Indexer(
-        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "http://localhost",
-        8980,
-      )
+      return new algosdk.Indexer(localnetIndexerToken, localnetIndexerUrl, localnetIndexerPort)
     if (activeNetwork === NetworkId.TESTNET) return new algosdk.Indexer("", "https://testnet-idx.4160.nodely.dev", "")
     return undefined
   }, [activeNetwork])
