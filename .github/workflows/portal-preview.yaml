@@ -62,6 +62,8 @@ jobs:
 
       - name: Upload preview version to Cloudflare
         id: deploy-preview
+        env:
+          WRANGLER_OUTPUT_FILE_PATH: /tmp/wrangler-output.json
         uses: cloudflare/wrangler-action@9acf94ace14e7dc412b076f2c5c20b8ce93c79cd # v3.15.0
         with:
           workingDirectory: projects/portal
@@ -69,9 +71,23 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
+      - name: Extract preview URL from wrangler output
+        id: extract-url
+        run: |
+          set -euo pipefail
+          PREVIEW_URL=$(jq -r 'select(.type == "version-upload") | .preview_url // empty' /tmp/wrangler-output.json | tail -n 1)
+
+          if [ -z "$PREVIEW_URL" ]; then
+            echo "::error::Could not extract preview URL from Wrangler output"
+            cat /tmp/wrangler-output.json
+            exit 1
+          fi
+
+          echo "deployment-url=${PREVIEW_URL}" >> "$GITHUB_OUTPUT"
+
       - name: Print preview URL
         env:
-          PREVIEW_URL: ${{ steps.deploy-preview.outputs.deployment-url }}
+          PREVIEW_URL: ${{ steps.extract-url.outputs.deployment-url }}
         run: |
           PREVIEW_APP_URL="${PREVIEW_URL%/}/app"
           echo "Preview URL: ${PREVIEW_APP_URL}"
