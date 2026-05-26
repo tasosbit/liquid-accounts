@@ -11,6 +11,7 @@ overrides:
   lodash: ^4.18.1
   fast-uri: ^3.1.2
   devalue: ^5.8.1
+  js-cookie: ^3.0.7
   ws@7: ^7.5.10
   ws@8: ^8.17.1
   minimatch@9: ^9.0.9
@@ -7420,9 +7421,9 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
-  js-cookie@3.0.5:
-    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
-    engines: {node: '>=14'}
+  js-cookie@3.0.7:
+    resolution: {integrity: sha512-z/wZZgDrkNV1eA0ULjM/F9/50Ya8fbzgKneSpoPsXSGd0KnpdtHfOZWK+GcwLk+EZbS4F9RBhU+K2RgzuDaItw==}
+    engines: {node: '>=20'}
 
   js-sha256@0.11.1:
     resolution: {integrity: sha512-o6WSo/LUvY2uC4j7mO50a2ms7E/EAdbP0swigLV+nzHKTTaYnaLIWJ02VdXrsJX0vGedDESQnLsOekr94ryfjg==}
@@ -20353,10 +20354,10 @@ snapshots:
       config-chain: 1.1.13
       editorconfig: 1.0.4
       glob: 10.5.0
-      js-cookie: 3.0.5
+      js-cookie: 3.0.7
       nopt: 7.2.1
 
-  js-cookie@3.0.5: {}
+  js-cookie@3.0.7: {}
 
   js-sha256@0.11.1: {}
 
