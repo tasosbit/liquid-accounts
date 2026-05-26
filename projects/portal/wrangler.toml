@@ -2,6 +2,7 @@ name = "algo-x-evm-portal"
 main = "@tanstack/react-start/server-entry"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
+preview_urls = true
 
 [observability.logs]
 enabled = true
