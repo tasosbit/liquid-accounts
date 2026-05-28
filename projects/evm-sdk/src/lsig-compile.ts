@@ -9,6 +9,12 @@ import { base64ToBytes, hexToBytes } from "./utils"
 /** Decoded compiled-lsig template; sentinel bytes occupy the OWNER slot. */
 export const LSIG_TEMPLATE_BYTES = base64ToBytes(LSIG_TEMPLATE_BASE64)
 
+if (LSIG_TEMPLATE_BYTES.length !== LSIG_TEMPLATE_LENGTH) {
+  throw new Error(
+    `lsig template byte length (${LSIG_TEMPLATE_BYTES.length}) does not match LSIG_TEMPLATE_LENGTH (${LSIG_TEMPLATE_LENGTH}) — regenerate src/generated/lsig-template.ts.`,
+  )
+}
+
 /**
  * Splice a 20-byte EVM owner address into the compiled lsig template.
  * Pure / synchronous — does not contact algod.
