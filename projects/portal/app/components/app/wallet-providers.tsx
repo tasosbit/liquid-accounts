@@ -9,7 +9,15 @@ if (typeof window !== "undefined") {
     ;(globalThis as Record<string, unknown>).TronWebProto = { Transaction: {} }
   }
 }
-import { WalletProvider, WalletManager, WalletId, LogLevel } from "@txnlab/use-wallet-react"
+import {
+  WalletProvider,
+  WalletManager,
+  WalletId,
+  LogLevel,
+  DEFAULT_NETWORK_CONFIG,
+  type NetworkConfig,
+} from "@txnlab/use-wallet-react"
+import { loadStoredNetwork } from "./network-storage"
 import { WalletUIProvider, type NoticesConfig } from "@txnlab/use-wallet-ui-react"
 import { getDefaultConfig, createRainbowKitConfig } from "@txnlab/use-wallet-ui-react/rainbowkit"
 import { algorandChain } from "algo-x-evm-sdk"
@@ -129,11 +137,36 @@ const notices: NoticesConfig = {
   },
 }
 
+// Limit to the networks the portal explicitly supports. Restricting via
+// WalletManager (rather than only filtering in the UI) means setActiveNetwork
+// for an unsupported network throws — defence-in-depth against stale
+// persisted state pointing to a removed network.
+const localnetAlgodUrl = import.meta.env.VITE_ALGOD_LOCALNET_URL as string | undefined
+const localnetAlgodPort = import.meta.env.VITE_ALGOD_LOCALNET_PORT as string | undefined
+const localnetAlgodToken = import.meta.env.VITE_ALGOD_LOCALNET_TOKEN as string | undefined
+
+const networks: Record<string, NetworkConfig> = {
+  mainnet: DEFAULT_NETWORK_CONFIG.mainnet,
+  testnet: DEFAULT_NETWORK_CONFIG.testnet,
+  localnet: {
+    ...DEFAULT_NETWORK_CONFIG.localnet,
+    algod: {
+      ...DEFAULT_NETWORK_CONFIG.localnet.algod,
+      ...(localnetAlgodUrl ? { baseServer: localnetAlgodUrl } : {}),
+      ...(localnetAlgodPort ? { port: localnetAlgodPort } : {}),
+      ...(localnetAlgodToken ? { token: localnetAlgodToken } : {}),
+    },
+  },
+}
+
 function makeWalletManager() {
   return new WalletManager({
     options: {
       debug: false,
       logLevel: LogLevel.WARN,
+      // resetNetwork:true forces the manager to use `defaultNetwork` on every
+      // boot. We supply our own persisted value via loadStoredNetwork(), so
+      // the manager's broken internal persistence is bypassed entirely.
       resetNetwork: true,
     },
     wallets: [
@@ -142,7 +175,8 @@ function makeWalletManager() {
         options: { wagmiConfig },
       },
     ],
-    defaultNetwork: "mainnet",
+    networks,
+    defaultNetwork: loadStoredNetwork(),
   })
 }
 

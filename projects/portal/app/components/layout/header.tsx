@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import { Link, useRouterState } from "@tanstack/react-router"
 import { ArrowUpRight, BookOpen } from "lucide-react"
 import { cn } from "~/lib/utils"
@@ -7,7 +8,12 @@ import { Button } from "~/components/ui/button"
 
 const navItems = [{ icon: <BookOpen size="16" />, label: "Docs", to: "/docs" as const }]
 
-export function Header() {
+interface HeaderProps {
+  /** Extra controls injected on the right (e.g. network switcher). */
+  extra?: ReactNode
+}
+
+export function Header({ extra }: HeaderProps = {}) {
   const routerState = useRouterState()
   const isLanding = routerState.location.pathname === "/"
   const isApp = routerState.location.pathname.startsWith("/app")
@@ -44,6 +50,7 @@ export function Header() {
               <ArrowUpRight size={16} />
             </Link>
           )}
+          {extra}
         </div>
       </div>
     </header>
