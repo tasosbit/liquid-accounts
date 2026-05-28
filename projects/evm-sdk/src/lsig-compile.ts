@@ -29,6 +29,9 @@ export function compileLsigForOwner(evmAddress: string): Uint8Array {
       `EVM address must be ${LSIG_OWNER_LENGTH} bytes (${LSIG_OWNER_LENGTH * 2} hex chars), got ${hex.length}`,
     )
   }
+  if (!/^[0-9a-f]+$/.test(hex)) {
+    throw new Error("EVM address must contain only hexadecimal characters")
+  }
   const ownerBytes = hexToBytes(hex)
   const program = new Uint8Array(LSIG_TEMPLATE_LENGTH)
   program.set(LSIG_TEMPLATE_BYTES, 0)
