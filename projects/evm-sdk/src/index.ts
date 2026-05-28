@@ -38,7 +38,7 @@ export class AlgoXEvmSdk {
   }
 
   /** Get Algorand address for a given EVM address (hex, with or without 0x prefix) */
-  async getAddress({ evmAddress }: { evmAddress: string }): Promise<string> {
+  getAddress({ evmAddress }: { evmAddress: string }): string {
     const compiled = this.getCompiled(evmAddress)
     const lsig = new algosdk.LogicSigAccount(compiled, [])
     return lsig.address().toString()
@@ -207,16 +207,16 @@ export class AlgoXEvmSdk {
    *   return wallet.signTypedData(domain, types, message)
    * }
    *
-   * const { addr, signer } = await sdk.getSigner({ evmAddress, signMessage })
+   * const { addr, signer } = sdk.getSigner({ evmAddress, signMessage })
    * ```
    */
-  async getSigner({
+  getSigner({
     evmAddress,
     signMessage,
   }: {
     evmAddress: string
     signMessage: (typedData: SignTypedDataParams) => Promise<string>
-  }): Promise<{ addr: string; signer: algosdk.TransactionSigner }> {
+  }): { addr: string; signer: algosdk.TransactionSigner } {
     const compiled = this.getCompiled(evmAddress)
     const lsig = new algosdk.LogicSigAccount(compiled, [])
     const addr = lsig.address().toString()

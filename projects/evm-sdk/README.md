@@ -75,7 +75,7 @@ const evmAddress = (await provider.send("eth_requestAccounts", []))[0]
 ### Get the Algorand address for an EVM account
 
 ```typescript
-const algoAddr = await sdk.getAddress({ evmAddress })
+const algoAddr = sdk.getAddress({ evmAddress })
 // => "ALGO..."
 ```
 
@@ -96,7 +96,7 @@ const signMessage = async ({ domain, types, message }: SignTypedDataParams) => {
   return wallet.signTypedData(domain, types, message)
 }
 
-const { addr, signer } = await sdk.getSigner({
+const { addr, signer } = sdk.getSigner({
   evmAddress,
   signMessage,
 })
@@ -110,7 +110,7 @@ const signMessage = async ({ domain, types, primaryType, message }: SignTypedDat
   return provider.send("eth_signTypedData_v4", [evmAddress, data])
 }
 
-const { addr, signer } = await sdk.getSigner({ evmAddress, signMessage })
+const { addr, signer } = sdk.getSigner({ evmAddress, signMessage })
 ```
 
 ### Send a standalone transaction
@@ -155,7 +155,7 @@ For full control over transaction construction and group ID assignment, use `sig
 import algosdk from "algosdk"
 import type { SignTypedDataParams } from "algo-x-evm-sdk"
 
-const addr = await sdk.getAddress({ evmAddress })
+const addr = sdk.getAddress({ evmAddress })
 
 const txn = await algorand.createTransaction.payment({
   sender: addr,
@@ -183,7 +183,7 @@ await algorand.client.algod.sendRawTransaction(signed).do()
 import algosdk from "algosdk"
 import { AlgoXEvmSdk, buildTypedData } from "algo-x-evm-sdk"
 
-const addr = await sdk.getAddress({ evmAddress })
+const addr = sdk.getAddress({ evmAddress })
 
 const txn = await algorand.createTransaction.payment({
   sender: addr,
