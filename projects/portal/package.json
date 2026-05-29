@@ -20,6 +20,7 @@
     "@d13co/open-in": "^0.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@rainbow-me/rainbowkit": "^2.2.0",
+    "@sentry/tanstackstart-react": "^10.53.1",
     "@tanstack/react-query": "^5",
     "@tanstack/react-router": "^1",
     "@tanstack/react-start": "^1",
