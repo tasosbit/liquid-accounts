@@ -9,8 +9,11 @@ function isExtensionError(event: Sentry.ErrorEvent): boolean {
   const stacktrace = JSON.stringify(event.exception) ?? ""
   return (
     msg.includes("chrome-extension://") ||
-    url.includes("chrome-extension://") ||
+    msg.includes("moz-extension://") ||
     msg.includes("safari-extension://") ||
+    url.includes("chrome-extension://") ||
+    url.includes("moz-extension://") ||
+    url.includes("safari-extension://") ||
     stacktrace.includes("chrome-extension://") ||
     stacktrace.includes("moz-extension://") ||
     stacktrace.includes("safari-extension://") ||
