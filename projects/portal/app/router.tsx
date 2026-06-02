@@ -40,6 +40,30 @@ function isUserRejection(event: Sentry.ErrorEvent): boolean {
   )
 }
 
+// EVM address: 0x + 40 hex chars. Negative lookahead prevents matching the first 40 chars of a 64-char tx hash.
+const EVM_ADDRESS_RE = /0x[a-fA-F0-9]{40}(?![a-fA-F0-9])/g
+// Algorand address: 58-char base32 (A-Z, 2-7). Tx IDs are 52 chars, so this won't match them.
+const ALGO_ADDRESS_RE = /\b[A-Z2-7]{58}\b/g
+
+/** Replaces EVM and Algorand wallet addresses in a string with safe placeholders. */
+function redactAddresses(value: string): string {
+  return value.replace(EVM_ADDRESS_RE, "[evm-address]").replace(ALGO_ADDRESS_RE, "[algo-address]")
+}
+
+/** Recursively redacts wallet addresses from any JSON-serialisable value. */
+function redactRecursive(value: unknown): unknown {
+  if (typeof value === "string") return redactAddresses(value)
+  if (Array.isArray(value)) return value.map(redactRecursive)
+  if (value !== null && typeof value === "object") {
+    const out: Record<string, unknown> = {}
+    for (const key of Object.keys(value as Record<string, unknown>)) {
+      out[key] = redactRecursive((value as Record<string, unknown>)[key])
+    }
+    return out
+  }
+  return value
+}
+
 export function getRouter() {
   const router = createTanStackRouter({
     routeTree,
@@ -57,11 +81,21 @@ export function getRouter() {
       sendDefaultPii: false,
       // Trace route navigations as performance transactions
       integrations: [Sentry.tanstackRouterBrowserTracingIntegration(router)],
+      // Scrub wallet addresses from breadcrumbs before they're collected in any event
+      beforeBreadcrumb(breadcrumb) {
+        if (typeof breadcrumb.message === "string") {
+          breadcrumb.message = redactAddresses(breadcrumb.message)
+        }
+        if (breadcrumb.data) {
+          breadcrumb.data = redactRecursive(breadcrumb.data) as Record<string, unknown>
+        }
+        return breadcrumb
+      },
 
       // -- Error monitoring --
       // Send 100% of error events
       sampleRate: 1.0,
-      // Event fine-grained pre-processing
+      // Custom event pre-processing before sending to Sentry
       beforeSend(event) {
         if (isExtensionError(event)) return null
         if (isUserRejection(event)) return null
