@@ -36,8 +36,6 @@ export default defineConfig({
         } catch {
           // environment API unavailable in some Vite versions
         }
-        if (id === "@tanstack/store") return { id: tanstackStorePath, external: false }
-        if (id === "@tanstack/react-store") return { id: tanstackReactStorePath, external: false }
         // buffer is handled by optimizeDeps.include below — don't intercept it here
         if (
           id === "use-sync-external-store/shim/with-selector" ||
@@ -68,6 +66,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "~": path.resolve(root, "app"),
+      "@tanstack/store": tanstackStorePath,
+      "@tanstack/react-store": tanstackReactStorePath,
     },
     dedupe: [
       "react",
