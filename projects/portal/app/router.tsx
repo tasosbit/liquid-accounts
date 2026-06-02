@@ -2,6 +2,8 @@ import { createRouter as createTanStackRouter } from "@tanstack/react-router"
 import * as Sentry from "@sentry/tanstackstart-react"
 import { routeTree } from "./routeTree.gen"
 
+const sentryLocalDev = import.meta.env.VITE_SENTRY_LOCAL_DEV === "true"
+
 /** Returns true if the error originated from a browser extension rather than our app. */
 function isExtensionError(event: Sentry.ErrorEvent): boolean {
   const msg = event.message ?? ""
@@ -50,7 +52,7 @@ export function getRouter() {
       // Where to send the events
       dsn: import.meta.env.VITE_SENTRY_DSN,
       // Set this to true to print out useful debugging information about what the SDK is doing
-      debug: false,
+      debug: sentryLocalDev,
       // We don't want any personally identifiable information (PII) in our error reports
       sendDefaultPii: false,
       // Trace route navigations as performance transactions
@@ -59,10 +61,11 @@ export function getRouter() {
       // -- Error monitoring --
       // Send 100% of error events
       sampleRate: 1.0,
-      // Error fine-grained filtering
+      // Event fine-grained pre-processing
       beforeSend(event) {
         if (isExtensionError(event)) return null
         if (isUserRejection(event)) return null
+        if (sentryLocalDev) console.log("Event sent to Sentry:", event)
         return event
       },
       // Append request's hostname on fetch errors
@@ -73,7 +76,7 @@ export function getRouter() {
         /ResizeObserver loop/,
       ],
       // Only capture errors that have at least one frame from our own bundle
-      allowUrls: [/xchain\.algorand\.co/],
+      allowUrls: sentryLocalDev ? [/xchain\.algorand\.co/, /localhost/] : [/xchain\.algorand\.co/],
 
       // -- Tracing --
       // Capture 20% of page navigations as performance traces
