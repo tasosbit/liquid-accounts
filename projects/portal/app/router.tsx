@@ -11,11 +11,12 @@ export function getRouter() {
     scrollRestoration: true,
   })
 
-  if (typeof window !== "undefined") {
+  const sentryDsn = import.meta.env.VITE_SENTRY_DSN
+  if (typeof window !== "undefined" && sentryDsn) {
     Sentry.init({
       // -- Core --
       // Where to send the events
-      dsn: import.meta.env.VITE_SENTRY_DSN,
+      dsn: sentryDsn,
       // Set this to true to print out useful debugging information about what the SDK is doing
       debug: sentryLocalDev,
       // We don't want any personally identifiable information (PII) in our error reports
