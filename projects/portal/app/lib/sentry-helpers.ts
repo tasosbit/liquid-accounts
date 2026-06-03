@@ -36,6 +36,16 @@ export function isUserRejection(event: ErrorEvent): boolean {
   )
 }
 
+/** Returns a stable anonymous session ID for Sentry user counting, persisted in `sessionStorage` for the tab lifetime. */
+export function getSentrySessionId(): string {
+  const key = "sentry_session_id"
+  const existing = sessionStorage.getItem(key)
+  if (existing) return existing
+  const id = crypto.randomUUID()
+  sessionStorage.setItem(key, id)
+  return id
+}
+
 // EVM tx hash: 0x + 64 hex chars.
 const EVM_TX_HASH_RE = /0x[a-fA-F0-9]{64}(?![a-fA-F0-9])/g
 // EVM address: 0x + 40 hex chars. Negative lookahead prevents matching the first 40 chars of a 64-char tx hash.
