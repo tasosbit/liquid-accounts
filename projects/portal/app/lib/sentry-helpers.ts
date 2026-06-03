@@ -23,7 +23,7 @@ export function isExtensionError(event: ErrorEvent): boolean {
 export function isUserRejection(event: ErrorEvent): boolean {
   return (
     event.exception?.values?.some((ex) => {
-      const code = (ex.value && /4001/.test(ex.value)) || (ex.type && /UserRejected/.test(ex.type))
+      const code = (ex.value && /\b4001\b/.test(ex.value)) || (ex.type && /UserRejected/.test(ex.type))
       const message = ex.value?.toLowerCase() ?? ""
       return (
         code ||
@@ -65,13 +65,14 @@ export function redactIdentifiers(value: string): string {
 }
 
 /** Recursively redacts wallet addresses from any JSON-serialisable value. */
-export function redactRecursive(value: unknown): unknown {
+export function redactRecursive(value: unknown, depth = 0): unknown {
   if (typeof value === "string") return redactIdentifiers(value)
-  if (Array.isArray(value)) return value.map(redactRecursive)
+  if (depth > 10) return value
+  if (Array.isArray(value)) return value.map((v) => redactRecursive(v, depth + 1))
   if (value !== null && typeof value === "object") {
     const out: Record<string, unknown> = {}
     for (const key of Object.keys(value as Record<string, unknown>)) {
-      out[key] = redactRecursive((value as Record<string, unknown>)[key])
+      out[key] = redactRecursive((value as Record<string, unknown>)[key], depth + 1)
     }
     return out
   }
