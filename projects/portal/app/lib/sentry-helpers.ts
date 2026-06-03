@@ -36,19 +36,27 @@ export function isUserRejection(event: ErrorEvent): boolean {
   )
 }
 
+// EVM tx hash: 0x + 64 hex chars.
+const EVM_TX_HASH_RE = /0x[a-fA-F0-9]{64}(?![a-fA-F0-9])/g
 // EVM address: 0x + 40 hex chars. Negative lookahead prevents matching the first 40 chars of a 64-char tx hash.
 const EVM_ADDRESS_RE = /0x[a-fA-F0-9]{40}(?![a-fA-F0-9])/g
+// Algorand tx ID: 52-char base32 (A-Z, 2-7). Addresses are 58 chars, so this won't match them.
+const ALGO_TX_ID_RE = /\b[A-Z2-7]{52}\b/g
 // Algorand address: 58-char base32 (A-Z, 2-7). Tx IDs are 52 chars, so this won't match them.
 const ALGO_ADDRESS_RE = /\b[A-Z2-7]{58}\b/g
 
-/** Replaces EVM and Algorand wallet addresses in a string with safe placeholders. */
-export function redactAddresses(value: string): string {
-  return value.replace(EVM_ADDRESS_RE, "[evm-address]").replace(ALGO_ADDRESS_RE, "[algo-address]")
+/** Replaces EVM and Algorand wallet addresses and tx hashes in a string with safe placeholders. */
+export function redactIdentifiers(value: string): string {
+  return value
+    .replace(EVM_TX_HASH_RE, "[evm-tx-hash]")
+    .replace(EVM_ADDRESS_RE, "[evm-address]")
+    .replace(ALGO_TX_ID_RE, "[algo-tx-id]")
+    .replace(ALGO_ADDRESS_RE, "[algo-address]")
 }
 
 /** Recursively redacts wallet addresses from any JSON-serialisable value. */
 export function redactRecursive(value: unknown): unknown {
-  if (typeof value === "string") return redactAddresses(value)
+  if (typeof value === "string") return redactIdentifiers(value)
   if (Array.isArray(value)) return value.map(redactRecursive)
   if (value !== null && typeof value === "object") {
     const out: Record<string, unknown> = {}

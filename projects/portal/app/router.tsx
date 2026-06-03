@@ -1,7 +1,7 @@
 import { createRouter as createTanStackRouter } from "@tanstack/react-router"
 import * as Sentry from "@sentry/tanstackstart-react"
 import { routeTree } from "./routeTree.gen"
-import { isExtensionError, isUserRejection, redactAddresses, redactRecursive } from "~/lib/sentry-helpers"
+import { isExtensionError, isUserRejection, redactIdentifiers, redactRecursive } from "~/lib/sentry-helpers"
 
 const sentryLocalDev = import.meta.env.VITE_SENTRY_LOCAL_DEV === "true"
 
@@ -25,7 +25,7 @@ export function getRouter() {
       // Scrub wallet addresses from breadcrumbs before they're collected in any event
       beforeBreadcrumb(breadcrumb) {
         if (typeof breadcrumb.message === "string") {
-          breadcrumb.message = redactAddresses(breadcrumb.message)
+          breadcrumb.message = redactIdentifiers(breadcrumb.message)
         }
         if (breadcrumb.data) {
           breadcrumb.data = redactRecursive(breadcrumb.data) as Record<string, unknown>
