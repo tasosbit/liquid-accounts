@@ -12,12 +12,12 @@ overrides:
   fast-uri: ^3.1.2
   devalue: ^5.8.1
   js-cookie: ^3.0.7
+  vitest: ^4.1.0
   ws@7: ^7.5.10
   ws@8: ^8.17.1
   minimatch@9: ^9.0.9
   minimatch@10: ^10.2.5
   picomatch@4: ^4.0.4
-  vitest: '>=4.1.0'
 
 importers:
 
@@ -67,7 +67,7 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
-        specifier: '>=4.1.0'
+        specifier: ^4.1.0
         version: 4.1.7(@opentelemetry/api@1.9.1)(@types/node@25.2.3)(@vitest/coverage-v8@4.1.7)(jiti@2.6.1)(jsdom@26.1.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.3)
       wrangler:
         specifier: ^4
@@ -134,7 +134,7 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
       vitest:
-        specifier: '>=4.1.0'
+        specifier: ^4.1.0
         version: 4.1.7(@opentelemetry/api@1.9.1)(@types/node@25.2.3)(@vitest/coverage-v8@4.1.7)(jiti@2.6.1)(jsdom@26.1.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.3)
 
   projects/evm-sdk:
@@ -456,7 +456,7 @@ importers:
         specifier: 2.11.10
         version: 2.11.10(@testing-library/jest-dom@6.9.1)(solid-js@1.9.11)(vite@6.4.2(@types/node@20.11.30)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.3))
       vitest:
-        specifier: '>=4.1.0'
+        specifier: ^4.1.0
         version: 4.1.7(@opentelemetry/api@1.9.1)(@types/node@20.11.30)(@vitest/coverage-v8@4.1.7)(jiti@2.6.1)(jsdom@26.1.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.3)
       vue-demi:
         specifier: 0.14.10
@@ -717,7 +717,7 @@ importers:
         specifier: 5.1.4
         version: 5.1.4(typescript@5.9.3)(vite@6.4.2(@types/node@25.2.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.3))
       vitest:
-        specifier: '>=4.1.0'
+        specifier: ^4.1.0
         version: 4.1.7(@opentelemetry/api@1.9.1)(@types/node@25.2.3)(@vitest/coverage-v8@3.2.4)(jiti@2.6.1)(jsdom@26.1.0(bufferutil@4.1.0)(utf-8-validate@5.0.10))(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.3)
       wagmi:
         specifier: ^2.14.0
@@ -3895,7 +3895,7 @@ packages:
     peerDependencies:
       svelte: ^3 || ^4 || ^5 || ^5.0.0-next.0
       vite: '*'
-      vitest: '>=4.1.0'
+      vitest: ^4.1.0
     peerDependenciesMeta:
       vite:
         optional: true
@@ -4480,7 +4480,7 @@ packages:
     resolution: {integrity: sha512-EyF9SXU6kS5Ku/U82E259WSnvg6c8KTjppUncuNdm5QHpe17mwREHnjDzozC8x9MZ0xfBUFSaLkRv4TMA75ALQ==}
     peerDependencies:
       '@vitest/browser': 3.2.4
-      vitest: '>=4.1.0'
+      vitest: ^4.1.0
     peerDependenciesMeta:
       '@vitest/browser':
         optional: true
@@ -4489,7 +4489,7 @@ packages:
     resolution: {integrity: sha512-qsYPeXc5Q9dFLd1i8Ap+Bx8sQgcp+rFVQo4R0dDsWNBzl26ldVF1qOO+RL24K7FDrR6pA+50XedRLSoSG24bVQ==}
     peerDependencies:
       '@vitest/browser': 4.1.7
-      vitest: '>=4.1.0'
+      vitest: ^4.1.0
     peerDependenciesMeta:
       '@vitest/browser':
         optional: true
