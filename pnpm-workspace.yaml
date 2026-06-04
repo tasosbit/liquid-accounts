@@ -13,11 +13,12 @@ onlyBuiltDependencies:
 overrides:
   typescript: 5.9.3 # pinned to fix build issues across workspace
   viem: 2.46.3 # pinned to match use-wallet-ui submodule
-  axios: ^1.15.2 # frontend>@allbridge>axios, frontend>@allbridge>axios>tronweb>axios
+  axios: ^1.16.0 # frontend>@allbridge>axios, frontend>@allbridge>axios>tronweb>axios
   lodash: ^4.18.1 # use-wallet-ui>react>vite-plugin-dts>@microsoft/api-extractor>lodash
   fast-uri: ^3.1.2 # evm-logicsig>better-npm-audit>table>ajv>fast-uri
   devalue: ^5.8.1 # use-wallet>@sveltejs/kit>devalue
   js-cookie: ^3.0.7 # use-wallet>@vue/test-utils>js-beautify>js-cookie
+  vitest: "^4.1.0" # use-wallet>vitest, use-wallet-ui>react>vitest
   "ws@7": ^7.5.10 # use-wallet>@blockshake/defly-connect>@walletconnect/client>...>ws
   "ws@8": ^8.17.1 # frontend>@allbridge>@stacks/blockchain-api-client>ws
   "minimatch@9": ^9.0.9 # evm-logicsig>@vitest/coverage-v8>test-exclude>minimatch, use-wallet>@vue/test-utils>...>minimatch
