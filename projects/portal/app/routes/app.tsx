@@ -1,9 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { createFileRoute, ClientOnly } from "@tanstack/react-router"
 import { lazy, Suspense } from "react"
 import { Header } from "~/components/layout/header"
 import { Footer } from "~/components/layout/footer"
 
-// Lazy-load wallet components to keep them client-only (SSR-safe)
+// Lazy-load delays the wallet app import until render
+// ClientOnly prevents browser-only wallet code from rendering during SSR
 const WalletApp = lazy(() => import("~/components/app/wallet-app"))
 
 export const Route = createFileRoute("/app")({
@@ -15,9 +16,11 @@ export const Route = createFileRoute("/app")({
 
 function AppPage() {
   return (
-    <Suspense fallback={<AppShellFallback />}>
-      <WalletApp />
-    </Suspense>
+    <ClientOnly fallback={<AppShellFallback />}>
+      <Suspense fallback={<AppShellFallback />}>
+        <WalletApp />
+      </Suspense>
+    </ClientOnly>
   )
 }
 

@@ -37,7 +37,7 @@ export function WalletDashboard() {
     }
   })
 
-  const { data: accountInfo } = useAccountInfo({ enabled: !!activeAddress })
+  const { data: accountInfo, isPending: isAccountPending } = useAccountInfo({ enabled: !!activeAddress })
 
   const totalBalance = useMemo(() => {
     if (!accountInfo || accountInfo.amount === undefined) return null
@@ -194,6 +194,14 @@ export function WalletDashboard() {
   }, [activeWallet])
 
   if (!activeAddress) return null
+
+  if (isAccountPending) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
+      </div>
+    )
+  }
 
   return (
     <div>
