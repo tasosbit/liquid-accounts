@@ -1,6 +1,6 @@
 [submodule "projects/use-wallet"]
 	path = projects/use-wallet
-	url = git@github.com:tasosbit/use-wallet.git
+	url = git@github.com:algorandfoundation/use-wallet-v4-xchain.git
 [submodule "projects/use-wallet-ui"]
 	path = projects/use-wallet-ui
-	url = git@github.com:tasosbit/use-wallet-ui.git
+	url = git@github.com:algorandfoundation/use-wallet-ui-xchain.git
