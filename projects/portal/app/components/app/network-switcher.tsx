@@ -106,6 +106,7 @@ export function NetworkSwitcher() {
         }
       }
       setOpen(false)
+      setError(null)
       try {
         await setActiveNetwork(id)
         saveStoredNetwork(id)

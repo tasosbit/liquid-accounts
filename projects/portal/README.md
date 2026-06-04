@@ -27,6 +27,16 @@ pnpm deploy     # build + wrangler deploy to Cloudflare
 
 The portal depends on workspace packages — run the workspace build (`algokit project run build` from the repo root, or at minimum build `evm-sdk` / `use-wallet*`) before `pnpm dev` if any of them changed.
 
+### Sentry
+
+For local Sentry testing/debug, set `VITE_SENTRY_DSN` and `VITE_SENTRY_LOCAL_DEV=true` at `projects/portal/.env` or inline when starting the dev server:
+
+```bash
+VITE_SENTRY_DSN=<dsn> VITE_SENTRY_LOCAL_DEV=true pnpm dev
+```
+
+> DSN can be found at portal-production GitHub environment or via Sentry portal.
+
 ## Authoring docs
 
 Add a Markdown file under `app/content/docs/` and register the route in `app/routes/docs/`. GFM and raw HTML are enabled (`remark-gfm`, `rehype-raw`).

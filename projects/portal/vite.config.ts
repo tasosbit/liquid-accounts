@@ -1,6 +1,7 @@
-import { defineConfig } from "vite"
+import { defineConfig, type PluginOption } from "vite"
 import { cloudflare } from "@cloudflare/vite-plugin"
 import { tanstackStart } from "@tanstack/react-start/plugin/vite"
+import { sentryTanstackStart } from "@sentry/tanstackstart-react/vite"
 import path from "node:path"
 
 const root = import.meta.dirname
@@ -54,6 +55,16 @@ export default defineConfig({
         return []
       },
     },
+    // Must be last - uploads sourcemaps and instruments middleware tracing
+    ...((process.env.SENTRY_AUTH_TOKEN
+      ? [
+          sentryTanstackStart({
+            org: "algorand-foundation",
+            project: "xchain-portal",
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+          }),
+        ]
+      : []) as PluginOption[]),
   ],
   // Buffer global injection for wallet/bridge libs
   define: {

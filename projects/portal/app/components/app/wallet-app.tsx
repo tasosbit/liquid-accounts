@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Link } from "@tanstack/react-router"
 import { useWallet, WalletId } from "@txnlab/use-wallet-react"
+import * as Sentry from "@sentry/tanstackstart-react"
+import { getSentrySessionId } from "~/lib/sentry-helpers"
 import { ConnectWalletButton } from "@txnlab/use-wallet-ui-react"
 import { WalletProviders, wagmiConfig } from "./wallet-providers"
 import { WalletDashboard } from "./wallet-dashboard"
@@ -54,6 +56,19 @@ function WalletResolver({ onResolved }: { onResolved: () => void }) {
 
 function WalletAppContent() {
   const { activeAddress, wallets } = useWallet()
+
+  useEffect(() => {
+    let userSet = false
+    try {
+      Sentry.setUser({ id: getSentrySessionId() })
+      userSet = true
+    } catch {
+      // if sessionStorage is blocked (e.g. private browsing), skip user recognition
+    }
+    return () => {
+      if (userSet) Sentry.setUser(null)
+    }
+  }, [])
 
   // Open RainbowKit's connect modal directly, skipping the intermediate
   // ConnectWalletMenu dialog. We still go through use-wallet's connect()

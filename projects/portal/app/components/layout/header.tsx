@@ -51,6 +51,17 @@ export function Header({ extra }: HeaderProps = {}) {
             </Link>
           )}
           {extra}
+          {import.meta.env.VITE_SENTRY_LOCAL_DEV === "true" && (
+            <button
+              type="button"
+              onClick={() => {
+                throw new Error("Sentry test")
+              }}
+              className="rounded bg-red-500 px-2 py-2 text-xs text-white font-bold"
+            >
+              Test Sentry
+            </button>
+          )}
         </div>
       </div>
     </header>

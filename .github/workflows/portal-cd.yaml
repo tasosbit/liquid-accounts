@@ -62,7 +62,19 @@ jobs:
       - name: Typecheck
         run: pnpm --filter ./projects/portal run typecheck
 
+      - name: Require Sentry config
+        env:
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+        run: |
+          if [ -z "$VITE_SENTRY_DSN" ]; then
+            echo "::error::VITE_SENTRY_DSN is not set. Add it as a variable in the portal-production environment."
+            exit 1
+          fi
+
       - name: Build
+        env:
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
         run: pnpm --filter ./projects/portal run build
 
       - name: Deploy to Cloudflare Workers
