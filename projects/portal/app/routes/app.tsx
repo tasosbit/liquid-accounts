@@ -10,7 +10,7 @@ const WalletApp = lazy(() => import("~/components/app/wallet-app"))
 export const Route = createFileRoute("/app")({
   component: AppPage,
   head: () => ({
-    meta: [{ title: "xChain EVM Portal" }],
+    meta: [{ title: "Portal — xChain EVM" }],
   }),
 })
 
