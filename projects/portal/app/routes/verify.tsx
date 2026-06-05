@@ -6,6 +6,8 @@ import { Footer } from "~/components/layout/footer"
 // Lazy-load + ClientOnly: verify-transaction depends on browser-only wallet/decoder UI behavior.
 const VerifyTransactionPage = lazy(() => import("~/components/verify-transaction"))
 
+// The "/verify" path is part of the verify-link contract: @d13co/algo-x-evm-ui's
+// VERIFY_PORTAL_URL / buildVerifyUrl build links pointing here. Keep in sync.
 export const Route = createFileRoute("/verify")({
   component: VerifyRoute,
   head: () => ({

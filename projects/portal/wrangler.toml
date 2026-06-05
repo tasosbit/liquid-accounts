@@ -11,6 +11,9 @@ invocation_logs = true
 [observability.traces]
 enabled = false
 
+# Canonical xChain portal origin. This is hardcoded as the trust anchor for
+# transaction-verify and docs links in the shared package — if this domain
+# changes, update XCHAIN_PORTAL_ORIGIN in @d13co/algo-x-evm-ui/src/constants.ts.
 [[routes]]
 pattern = "xchain.algorand.co"
 custom_domain = true
