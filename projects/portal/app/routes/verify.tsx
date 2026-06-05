@@ -1,0 +1,38 @@
+import { createFileRoute, ClientOnly } from "@tanstack/react-router"
+import { lazy, Suspense } from "react"
+import { Header } from "~/components/layout/header"
+import { Footer } from "~/components/layout/footer"
+
+// Lazy-load + ClientOnly: verify-transaction depends on browser-only wallet/decoder UI behavior.
+const VerifyTransactionPage = lazy(() => import("~/components/verify-transaction"))
+
+export const Route = createFileRoute("/verify")({
+  component: VerifyRoute,
+  head: () => ({
+    meta: [{ title: "Verify Transaction — xChain EVM" }],
+  }),
+})
+
+function VerifyRoute() {
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8">
+        <ClientOnly fallback={<VerifySpinner />}>
+          <Suspense fallback={<VerifySpinner />}>
+            <VerifyTransactionPage />
+          </Suspense>
+        </ClientOnly>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+function VerifySpinner() {
+  return (
+    <div className="flex justify-center py-12">
+      <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
+    </div>
+  )
+}
