@@ -1,13 +1,7 @@
-import { Buffer } from "buffer"
 import { ArrowRight } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
-
-// Polyfill Buffer for algosdk / decoder dependencies
-if (typeof window !== "undefined") {
-  ;(globalThis as Record<string, unknown>).Buffer = Buffer
-}
 import { AlgoXEvmSdk } from "algo-x-evm-sdk"
 import { decodeTransactions, decodeTxnGroup, TransactionReview } from "@d13co/algo-x-evm-ui"
 import "@txnlab/use-wallet-ui-react/dist/style.css"

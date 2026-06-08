@@ -1,7 +1,14 @@
+import { Buffer } from "buffer"
 import { createFileRoute, ClientOnly } from "@tanstack/react-router"
 import { lazy, Suspense } from "react"
 import { Header } from "~/components/layout/header"
 import { Footer } from "~/components/layout/footer"
+
+// Set before the lazy import so it's ready when the verify bundle loads -
+// this route opens standalone, without wallet-providers.tsx's polyfill.
+if (typeof window !== "undefined") {
+  ;(globalThis as Record<string, unknown>).Buffer = Buffer
+}
 
 // Lazy-load + ClientOnly: verify-transaction depends on browser-only wallet/decoder UI behavior.
 const VerifyTransactionPage = lazy(() => import("~/components/verify-transaction"))
