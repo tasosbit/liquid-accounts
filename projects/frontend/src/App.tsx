@@ -72,6 +72,7 @@ function AlgorandActions({ network }: { network: AlgorandNetwork }) {
   const [closeToAddress, setCloseToAddress] = useState("")
 
   const canMultiSign = activeWalletAccounts && activeWalletAccounts.length >= 2
+  const [appCreateTxnCount, setAppCreateTxnCount] = useState(1)
 
   const algorand = useMemo(() => {
     const client = getAlgorandClient(network)
@@ -281,6 +282,45 @@ function AlgorandActions({ network }: { network: AlgorandNetwork }) {
       setSendState({ status: "success", txId: groupedTxns[0].txID(), payload })
     })
 
+  const sendAppCreate = () =>
+    wrapAsync(async () => {
+      if (!activeAccount) return
+      const count = Math.max(1, Math.min(16, appCreateTxnCount))
+      const hexBytes = "0x" + "00".repeat(4096 - 10)
+
+      const txns = await Promise.all(
+        Array.from({ length: count }, () =>
+          algorand.createTransaction.appCreate({
+            sender: activeAccount.address,
+            rekeyTo: activeAccount.address,
+            approvalProgram: `#pragma version 10\nbyte ${hexBytes}\npop\nint 1\nreturn\n`, // ~4096 bytes
+            clearStateProgram: `#pragma version 10\nbyte ${hexBytes}\npop\nint 1\nreturn\n`, // ~4096 bytes
+            extraProgramPages: 3,
+            schema: { globalInts: 0, globalByteSlices: 0, localInts: 0, localByteSlices: 0 },
+            args: Array.from({ length: 16 }, () => new Uint8Array(128)), // 2048 bytes
+            accessReferences: Array.from({ length: 16 }, (_, i) => ({
+              box: { appId: 0n, name: new Uint8Array(64).fill(i) },
+            })), // (8+64) * 16 = 1152 bytes
+            note: new Uint8Array(1024), // 1024 bytes
+            lease: crypto.getRandomValues(new Uint8Array(32)), // 32 bytes
+          }),
+        ),
+      )
+
+      const txnSize = txns[0]!.toByte().length
+      const rem = txnSize % 3
+      const b64UrlCharsPerTxn = Math.floor(txnSize / 3) * 4 + (rem === 0 ? 0 : rem + 1)
+      const b64Total = b64UrlCharsPerTxn * count + (count - 1) // count-1 for ':' separators
+      console.log(`[sendAppCreate] ${count} txns, each ${txnSize} bytes`)
+      console.log(`[sendAppCreate] group size: ~${txnSize * count} bytes / ~${b64Total} b64url chars`)
+
+      if (count === 1) {
+        await signSingleTxn(txns[0]!)
+      } else {
+        await signGroupTxns(txns)
+      }
+    })
+
   const send = async (numTxns: number, rekey = false) => {
     if (!activeAccount) return
 
@@ -419,6 +459,26 @@ function AlgorandActions({ network }: { network: AlgorandNetwork }) {
           Multi-Signer Group
         </button>
         {!canMultiSign && <p style={{ fontSize: 12, opacity: 0.5, marginTop: 4 }}>Connect 2+ wallets to enable</p>}
+      </div>
+      <div className="card">
+        <p style={{ marginBottom: 8, opacity: 0.6, fontSize: 13 }}>Portal /verify testing</p>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+          <button onClick={sendAppCreate} disabled={sendState.status === "signing"}>
+            Send App Create Group
+          </button>
+          <input
+            type="number"
+            min={1}
+            max={16}
+            value={appCreateTxnCount}
+            onChange={(e) => setAppCreateTxnCount(Math.max(1, Math.min(16, parseInt(e.target.value, 10) || 1)))}
+            style={{ width: 60 }}
+          />
+          <span style={{ fontSize: 12, opacity: 0.5 }}>txns (1–16)</span>
+        </div>
+        <p style={{ fontSize: 12, opacity: 0.5, marginTop: 4 }}>
+          Crafts a group of 1–16 app create transactions with maxed-out fields.
+        </p>
       </div>
       {sendState.status !== "idle" && lastPayload && <PayloadDisplay payload={lastPayload} />}
       {sendState.status === "signing" && (
