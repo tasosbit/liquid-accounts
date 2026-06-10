@@ -14,7 +14,11 @@ export const Route = createRootRoute({
           "Connect MetaMask or any EVM wallet to send transactions, manage assets, and bridge tokens on Algorand.",
       },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon-light.svg", media: "(prefers-color-scheme: light)" },
+      { rel: "icon", type: "image/svg+xml", href: "/favicon-dark.svg", media: "(prefers-color-scheme: dark)" },
+    ],
   }),
   component: RootComponent,
   notFoundComponent: NotFound,
