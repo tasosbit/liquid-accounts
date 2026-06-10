@@ -89,7 +89,13 @@ function VerifyPageContent() {
         <p className="text-sm text-muted-foreground">
           This page verifies pending Algorand xChain EVM transactions before signing. Open it via the Verify button from
           the transaction review dialog of your dApp.{" "}
-          <Link className="underline" to="/docs/$slug" params={{ slug: "verifying-transactions" }}>
+          <Link
+            className="underline"
+            to="/docs/$slug"
+            params={{ slug: "verifying-transactions" }}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Learn more
             <ArrowRight size={12} className="inline-block ml-0.5 -mt-0.5" />
           </Link>
@@ -107,7 +113,13 @@ function VerifyPageContent() {
             ? "Sign payload could not be computed from the transaction data."
             : "The transaction data in the URL could not be decoded."}{" "}
           {"Try opening this page again via the Verify button from the transaction review dialog. "}
-          <Link className="underline" to="/docs/$slug" params={{ slug: "verifying-transactions" }}>
+          <Link
+            className="underline"
+            to="/docs/$slug"
+            params={{ slug: "verifying-transactions" }}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Learn more
             <ArrowRight size={12} className="inline-block ml-0.5 -mt-0.5" />
           </Link>
@@ -124,7 +136,13 @@ function VerifyPageContent() {
       <p className="text-sm text-muted-foreground mb-6">
         This is an independent view of the transaction group a dApp is asking you to sign. Confirm the details below
         match what you intended, and that the transaction ID matches what your EVM wallet shows.{" "}
-        <Link className="underline" to="/docs/$slug" params={{ slug: "verifying-transactions" }}>
+        <Link
+          className="underline"
+          to="/docs/$slug"
+          params={{ slug: "verifying-transactions" }}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Learn more
           <ArrowRight size={12} className="inline-block ml-0.5 -mt-0.5" />
         </Link>
@@ -132,7 +150,7 @@ function VerifyPageContent() {
       <div data-wallet-theme data-wallet-ui>
         <div className="rounded-3xl bg-[var(--wui-color-bg)] shadow-xl border border-[var(--wui-color-border)]">
           <TransactionReview
-            verify
+            verifyDisplayMode
             transactions={decoded.decodedTransactions}
             message={decoded.message}
             dangerous={decoded.dangerous}
