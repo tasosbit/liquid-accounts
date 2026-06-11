@@ -148,7 +148,7 @@ function VerifyPageContent() {
         </Link>
       </p>
       <div data-wallet-theme data-wallet-ui>
-        <div className="rounded-3xl bg-[var(--wui-color-bg)] shadow-xl border border-[var(--wui-color-border)]">
+        <div className="rounded-3xl border border-[var(--wui-color-border)]">
           <TransactionReview
             verifyDisplayMode
             transactions={decoded.decodedTransactions}

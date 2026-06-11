@@ -15,6 +15,7 @@ interface HeaderProps {
 export function Header({ extra }: HeaderProps = {}) {
   const routerState = useRouterState()
   const isApp = routerState.location.pathname.startsWith("/app")
+  const isDocs = routerState.location.pathname.startsWith("/docs")
 
   return (
     <header className="sticky top-0 z-50 bg-algo-blue-10/80 dark:bg-algo-black-80/80 backdrop-blur-sm">
@@ -30,11 +31,13 @@ export function Header({ extra }: HeaderProps = {}) {
 
         <div className="flex items-center gap-2">
           <nav className="flex items-center gap-2">
-            {navItems.map((item) => (
-              <Button key={item.to} variant="ghost" size="icon" className="h-9 w-9" aria-label={item.label} asChild>
-                <Link to={item.to}>{item.icon ? item.icon : item.label}</Link>
-              </Button>
-            ))}
+            {navItems
+              .filter((item) => !(isDocs && item.to === "/docs"))
+              .map((item) => (
+                <Button key={item.to} variant="ghost" size="icon" className="h-9 w-9" aria-label={item.label} asChild>
+                  <Link to={item.to}>{item.icon ? item.icon : item.label}</Link>
+                </Button>
+              ))}
           </nav>
           <ThemeToggle />
           {!isApp && (

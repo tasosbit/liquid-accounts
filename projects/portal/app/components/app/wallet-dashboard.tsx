@@ -204,7 +204,7 @@ export function WalletDashboard() {
   }
 
   return (
-    <div data-wallet-theme data-wallet-ui>
+    <div data-wallet-theme className="wui-portal-theme">
       <ManagePanel
         wideBreakpoint={800}
         onBridgeEnter={isMainnet ? enableBridge : undefined}
