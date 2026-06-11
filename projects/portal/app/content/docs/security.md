@@ -1,7 +1,7 @@
 ---
 title: Security
 description: How xChain EVM keeps your assets secure using on-chain ECDSA verification.
-order: 7
+order: 8
 category: Advanced
 ---
 

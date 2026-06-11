@@ -88,7 +88,7 @@ function VerifyPageContent() {
         <p className="text-lg font-medium mb-2">No transaction payload provided</p>
         <p className="text-sm text-muted-foreground">
           This page verifies pending Algorand xChain EVM transactions before signing. Open it via the Verify button from
-          the transaction review dialog of your dApp.{" "}
+          the transaction review dialog of your app.{" "}
           <Link
             className="underline"
             to="/docs/$slug"
@@ -134,8 +134,8 @@ function VerifyPageContent() {
     <div>
       <h1 className="text-2xl font-bold mb-2">Verify Transaction{txCount > 1 ? "s" : ""}</h1>
       <p className="text-sm text-muted-foreground mb-6">
-        This is an independent view of the transaction group a dApp is asking you to sign. Confirm the details below
-        match what you intended, and that the transaction ID matches what your EVM wallet shows.{" "}
+        This is an independent view of the transaction{txCount > 1 ? " group" : ""} an app is asking you to sign.
+        Confirm the details below match what you intend to do.{" "}
         <Link
           className="underline"
           to="/docs/$slug"
