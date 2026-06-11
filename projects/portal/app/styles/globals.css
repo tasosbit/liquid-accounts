@@ -83,3 +83,11 @@
   --wui-color-avatar-bg: hsl(var(--muted));
   --wui-color-avatar-icon: hsl(var(--muted-foreground));
 }
+
+/* Override the Wallet UI injected dark-theme vars (0,3,0 specificity beats the block above). */
+.dark [data-wallet-theme][data-theme],
+.dark [data-wallet-theme][data-wallet-ui] {
+  --wui-color-primary: #a9a9f6 !important;
+  --wui-color-primary-hover: #bfbff9 !important;
+  --wui-color-bg-secondary: #192a39 !important;
+}
