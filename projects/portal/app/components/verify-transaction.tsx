@@ -135,7 +135,8 @@ function VerifyPageContent() {
       <h1 className="text-2xl font-bold mb-2">Verify Transaction{txCount > 1 ? "s" : ""}</h1>
       <p className="text-sm text-muted-foreground mb-6">
         This is an independent view of the transaction{txCount > 1 ? " group" : ""} an app is asking you to sign.
-        Confirm the details below match what you intend to do.{" "}
+        <strong> Before signing:</strong> confirm the details below match what you intend to do, and that the ID matches
+        what your app and wallet show.{" "}
         <Link
           className="underline"
           to="/docs/$slug"
