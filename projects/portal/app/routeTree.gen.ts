@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerifyRouteImport } from './routes/verify'
 import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as AppRouteImport } from './routes/app'
@@ -16,6 +17,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DocsIndexRouteImport } from './routes/docs/index'
 import { Route as DocsSlugRouteImport } from './routes/docs/$slug'
 
+const VerifyRoute = VerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
   id: '/terms-of-service',
   path: '/terms-of-service',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/docs': typeof DocsRouteWithChildren
   '/terms-of-service': typeof TermsOfServiceRoute
+  '/verify': typeof VerifyRoute
   '/docs/$slug': typeof DocsSlugRoute
   '/docs/': typeof DocsIndexRoute
 }
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/app': typeof AppRoute
   '/terms-of-service': typeof TermsOfServiceRoute
+  '/verify': typeof VerifyRoute
   '/docs/$slug': typeof DocsSlugRoute
   '/docs': typeof DocsIndexRoute
 }
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/docs': typeof DocsRouteWithChildren
   '/terms-of-service': typeof TermsOfServiceRoute
+  '/verify': typeof VerifyRoute
   '/docs/$slug': typeof DocsSlugRoute
   '/docs/': typeof DocsIndexRoute
 }
@@ -78,16 +87,18 @@ export interface FileRouteTypes {
     | '/app'
     | '/docs'
     | '/terms-of-service'
+    | '/verify'
     | '/docs/$slug'
     | '/docs/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/app' | '/terms-of-service' | '/docs/$slug' | '/docs'
+  to: '/' | '/app' | '/terms-of-service' | '/verify' | '/docs/$slug' | '/docs'
   id:
     | '__root__'
     | '/'
     | '/app'
     | '/docs'
     | '/terms-of-service'
+    | '/verify'
     | '/docs/$slug'
     | '/docs/'
   fileRoutesById: FileRoutesById
@@ -97,10 +108,18 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   DocsRoute: typeof DocsRouteWithChildren
   TermsOfServiceRoute: typeof TermsOfServiceRoute
+  VerifyRoute: typeof VerifyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verify': {
+      id: '/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof VerifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/terms-of-service': {
       id: '/terms-of-service'
       path: '/terms-of-service'
@@ -163,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRoute,
   DocsRoute: DocsRouteWithChildren,
   TermsOfServiceRoute: TermsOfServiceRoute,
+  VerifyRoute: VerifyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

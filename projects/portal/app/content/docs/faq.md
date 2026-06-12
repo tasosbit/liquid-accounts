@@ -1,7 +1,7 @@
 ---
 title: FAQ
 description: Frequently asked questions about xChain EVM.
-order: 9
+order: 10
 category: Advanced
 ---
 

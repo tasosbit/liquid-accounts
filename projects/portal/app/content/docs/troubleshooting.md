@@ -1,7 +1,7 @@
 ---
 title: Troubleshooting
 description: Common issues with xChain EVM and how to resolve them.
-order: 8
+order: 9
 category: Advanced
 ---
 

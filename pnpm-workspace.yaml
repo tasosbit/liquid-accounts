@@ -19,6 +19,7 @@ overrides:
   devalue: ^5.8.1 # use-wallet>@sveltejs/kit>devalue
   js-cookie: ^3.0.7 # use-wallet>@vue/test-utils>js-beautify>js-cookie
   vitest: "^4.1.0" # use-wallet>vitest, use-wallet-ui>react>vitest
+  shell-quote: ^1.8.4 # use-wallet-ui>liquid-companion-extension>concurrently>shell-quote
   "ws@7": ^7.5.10 # use-wallet>@blockshake/defly-connect>@walletconnect/client>...>ws
   "ws@8": ^8.17.1 # frontend>@allbridge>@stacks/blockchain-api-client>ws
   "minimatch@9": ^9.0.9 # evm-logicsig>@vitest/coverage-v8>test-exclude>minimatch, use-wallet>@vue/test-utils>...>minimatch

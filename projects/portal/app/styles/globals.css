@@ -33,7 +33,7 @@
     --card-foreground: 240 100% 96%;
     --popover: 208 39% 10%;
     --popover-foreground: 240 100% 96%;
-    --primary: 179 80% 44%;
+    --primary: 240 81% 81%;
     --primary-foreground: 208 100% 7%;
     --secondary: 208 39% 16%;
     --secondary-foreground: 240 100% 96%;
@@ -45,7 +45,7 @@
     --destructive-foreground: 210 20% 98%;
     --border: 208 39% 16%;
     --input: 208 39% 16%;
-    --ring: 179 80% 44%;
+    --ring: 240 81% 81%;
   }
 }
 
@@ -82,4 +82,21 @@
   --wui-color-link-hover: hsl(var(--primary));
   --wui-color-avatar-bg: hsl(var(--muted));
   --wui-color-avatar-icon: hsl(var(--muted-foreground));
+}
+
+/* Override the injected dark-theme vars (0,3,0 beats the block above). danger-*
+   restore the library's red — portal's hsl(--destructive) mapping is too faint. */
+.dark [data-wallet-theme][data-theme],
+.dark [data-wallet-theme][data-wallet-ui],
+.dark [data-wallet-theme].wui-portal-theme {
+  --wui-color-primary: #a9a9f6 !important;
+  --wui-color-primary-hover: #bfbff9 !important;
+  --wui-color-bg-secondary: #192a39 !important;
+  --wui-color-border: #334250 !important;
+  --wui-color-danger-bg: rgba(255, 127, 72, 0.18) !important;
+  --wui-color-danger-bg-hover: rgba(255, 127, 72, 0.28) !important;
+  --wui-color-danger-text: #ff7f48 !important;
+  --wui-color-danger-button-text: #1a0a00 !important;
+  --wui-color-verify: #01dc94 !important;
+  --wui-color-verify-text: #00261b !important;
 }

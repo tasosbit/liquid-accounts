@@ -191,6 +191,7 @@ export function WalletProviders({ children }: { children: ReactNode }) {
         rainbowkit={rainbowkitConfig}
         notices={notices}
         swapRouter={haystackRouter}
+        verify={false}
       >
         {children}
       </WalletUIProvider>

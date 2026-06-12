@@ -128,8 +128,8 @@ export function NetworkSwitcher() {
         aria-label={`Network: ${current.label}`}
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "inline-flex h-9 items-center gap-1.5 rounded-md border border-input bg-background px-2.5 text-sm",
-          "transition-colors hover:bg-accent hover:text-accent-foreground",
+          "inline-flex h-9 items-center gap-1.5 rounded-lg border-transparent dark:border dark:border-input bg-background dark:bg-algo-black-90 px-2.5 text-sm",
+          "transition-all hover:brightness-95",
         )}
         title={`Network: ${current.label}`}
       >
@@ -141,7 +141,7 @@ export function NetworkSwitcher() {
       {open && (
         <div
           role="listbox"
-          className="absolute right-0 top-full z-50 mt-1 min-w-[160px] rounded-md border bg-background p-1 shadow-md"
+          className="absolute right-0 top-full z-50 mt-1 min-w-[160px] rounded-lg border bg-background p-1 shadow-md"
         >
           {options.map((opt) => {
             const isActive = opt.id === activeNetwork
@@ -155,10 +155,11 @@ export function NetworkSwitcher() {
                 disabled={checkingId !== null}
                 onClick={() => handleSelect(opt.id)}
                 className={cn(
-                  "flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm",
-                  "transition-colors hover:bg-accent hover:text-accent-foreground",
-                  "disabled:cursor-not-allowed disabled:opacity-60",
-                  isActive && "font-medium",
+                  "flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm",
+                  "transition-all disabled:cursor-not-allowed disabled:opacity-60",
+                  isActive
+                    ? "bg-primary font-medium text-primary-foreground dark:bg-algo-blue-40 dark:text-algo-black-90"
+                    : "hover:bg-secondary hover:text-secondary-foreground",
                 )}
               >
                 <span className={cn("h-1.5 w-1.5 rounded-full", opt.dotClass)} aria-hidden />

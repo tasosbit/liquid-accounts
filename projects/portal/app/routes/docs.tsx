@@ -6,6 +6,8 @@ import { cn } from "~/lib/utils"
 import { useState } from "react"
 import { Menu, X } from "lucide-react"
 
+// The "/docs" path is part of the docs-link contract: @d13co/algo-x-evm-ui's
+// DOCS_PORTAL_URL builds "Learn more" links pointing here. Keep in sync.
 export const Route = createFileRoute("/docs")({
   component: DocsLayout,
   head: () => ({
