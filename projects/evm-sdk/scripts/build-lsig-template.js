@@ -47,7 +47,9 @@ function bytesToBase64(bytes) {
 
 async function main() {
   if (!fs.existsSync(tealSrc)) {
-    throw new Error(`TEAL source not found at ${tealSrc} — run copy-teal.js first.`)
+    throw new Error(
+      `TEAL source not found at ${tealSrc} — build the evm-logicsig project first (algokit project run build).`,
+    )
   }
   const teal = fs.readFileSync(tealSrc, "utf8")
 

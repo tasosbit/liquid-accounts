@@ -1,12 +1,6 @@
-import {
-  LSIG_OWNER_LENGTH,
-  LSIG_OWNER_OFFSET,
-  LSIG_TEMPLATE_BASE64,
-  LSIG_TEMPLATE_LENGTH,
-} from "./generated/lsig-template"
-import { base64ToBytes, bytesToHex } from "./utils"
-
-const TEMPLATE_BYTES = base64ToBytes(LSIG_TEMPLATE_BASE64)
+import { LSIG_OWNER_LENGTH, LSIG_OWNER_OFFSET, LSIG_TEMPLATE_LENGTH } from "./generated/lsig-template"
+import { LSIG_TEMPLATE_BYTES } from "./lsig-compile"
+import { bytesToHex } from "./utils"
 
 /**
  * Pattern-match a compiled lsig program against the xChain EVM lsig template.
@@ -21,7 +15,7 @@ export function getEvmAddressFromProgram(program: Uint8Array): `0x${string}` | n
   const ownerEnd = LSIG_OWNER_OFFSET + LSIG_OWNER_LENGTH
   for (let i = 0; i < program.length; i++) {
     if (i >= LSIG_OWNER_OFFSET && i < ownerEnd) continue
-    if (program[i] !== TEMPLATE_BYTES[i]) return null
+    if (program[i] !== LSIG_TEMPLATE_BYTES[i]) return null
   }
   return bytesToHex(program.subarray(LSIG_OWNER_OFFSET, ownerEnd))
 }

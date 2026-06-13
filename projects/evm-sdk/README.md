@@ -75,7 +75,7 @@ const evmAddress = (await provider.send("eth_requestAccounts", []))[0]
 ### Get the Algorand address for an EVM account
 
 ```typescript
-const algoAddr = await sdk.getAddress({ evmAddress })
+const algoAddr = sdk.getAddress({ evmAddress })
 // => "ALGO..."
 ```
 
@@ -96,7 +96,7 @@ const signMessage = async ({ domain, types, message }: SignTypedDataParams) => {
   return wallet.signTypedData(domain, types, message)
 }
 
-const { addr, signer } = await sdk.getSigner({
+const { addr, signer } = sdk.getSigner({
   evmAddress,
   signMessage,
 })
@@ -110,7 +110,7 @@ const signMessage = async ({ domain, types, primaryType, message }: SignTypedDat
   return provider.send("eth_signTypedData_v4", [evmAddress, data])
 }
 
-const { addr, signer } = await sdk.getSigner({ evmAddress, signMessage })
+const { addr, signer } = sdk.getSigner({ evmAddress, signMessage })
 ```
 
 ### Send a standalone transaction
@@ -155,7 +155,7 @@ For full control over transaction construction and group ID assignment, use `sig
 import algosdk from "algosdk"
 import type { SignTypedDataParams } from "algo-x-evm-sdk"
 
-const addr = await sdk.getAddress({ evmAddress })
+const addr = sdk.getAddress({ evmAddress })
 
 const txn = await algorand.createTransaction.payment({
   sender: addr,
@@ -183,7 +183,7 @@ await algorand.client.algod.sendRawTransaction(signed).do()
 import algosdk from "algosdk"
 import { AlgoXEvmSdk, buildTypedData } from "algo-x-evm-sdk"
 
-const addr = await sdk.getAddress({ evmAddress })
+const addr = sdk.getAddress({ evmAddress })
 
 const txn = await algorand.createTransaction.payment({
   sender: addr,
@@ -229,9 +229,9 @@ Note: lsig programs are not stored per-account on Algorand — they are persiste
 
 ### `AlgoXEvmSdk`
 
-#### `constructor({ algorand: AlgorandClient })`
+#### `constructor({ algorand?: AlgorandClient })`
 
-Creates an SDK instance. The `AlgorandClient` is used to compile the TEAL template. Compiled programs are cached per EVM address.
+Creates an SDK instance. Lsig compilation is done offline by splicing the EVM owner into a build-time-pinned bytecode template, so no `AlgorandClient` is required for `getAddress`, `signTxn`, or `getSigner`. Pass an `AlgorandClient` if you intend to call `getEvmAddressFromAccount` (which uses the indexer). Compiled programs are cached per EVM address.
 
 #### `getAddress({ evmAddress: string }): Promise<string>`
 
@@ -286,6 +286,8 @@ Same as `getEvmAddressFromProgram` but accepts an algosdk `LogicSig` or `LogicSi
 #### `getEvmAddressFromAccount({ algorandAddress, limit? }): Promise<\`0x${string}\` | null>`
 
 Queries the indexer for recent transactions sent by `algorandAddress`, finds one signed with an lsig, and returns the embedded EVM address if the lsig matches the xChain template. `limit` defaults to 1 and bounds how many recent transactions are scanned. Returns `null` if no matching lsig is found in the search window.
+
+Throws if the SDK was constructed without an `AlgorandClient` — this is the only method that requires one.
 
 ### Types
 
