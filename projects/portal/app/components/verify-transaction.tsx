@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Link } from "@tanstack/react-router"
@@ -32,12 +32,29 @@ function VerifyPageContent() {
       return undefined // origin is nice2have
     }
   })
+  const [showBackToApp] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false
+    return new URLSearchParams(window.location.search).get("return") === "1" && window.history.length > 1
+  })
 
   useEffect(() => {
     const onHashChange = () => setPayload(readHashPayload())
     window.addEventListener("hashchange", onHashChange)
     return () => window.removeEventListener("hashchange", onHashChange)
   }, [])
+
+  const backToAppButton = showBackToApp ? (
+    <div className="sticky top-20 z-20 mb-6">
+      <button
+        type="button"
+        onClick={() => window.history.back()}
+        className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground shadow-lg hover:opacity-90 transition-opacity"
+      >
+        <ArrowLeft size={16} />
+        Back to app
+      </button>
+    </div>
+  ) : null
 
   // Core decoding logic: decode transactions from URL payload, then compute the EIP-712 sign message.
   const decoded = useMemo(() => {
@@ -84,46 +101,52 @@ function VerifyPageContent() {
 
   if (!payload) {
     return (
-      <div className="rounded-lg border bg-card p-8 text-center">
-        <p className="text-lg font-medium mb-2">No transaction payload provided</p>
-        <p className="text-sm text-muted-foreground">
-          This page verifies pending Algorand xChain EVM transactions before signing. Open it via the Verify button from
-          the transaction review dialog of your app.{" "}
-          <Link
-            className="underline"
-            to="/docs/$slug"
-            params={{ slug: "verifying-transactions" }}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn more
-            <ArrowRight size={12} className="inline-block ml-0.5 -mt-0.5" />
-          </Link>
-        </p>
+      <div>
+        {backToAppButton}
+        <div className="rounded-lg border bg-card p-8 text-center">
+          <p className="text-lg font-medium mb-2">No transaction payload provided</p>
+          <p className="text-sm text-muted-foreground">
+            This page verifies pending Algorand xChain EVM transactions before signing. Open it via the Verify button
+            from the transaction review dialog of your app.{" "}
+            <Link
+              className="underline"
+              to="/docs/$slug"
+              params={{ slug: "verifying-transactions" }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn more
+              <ArrowRight size={12} className="inline-block ml-0.5 -mt-0.5" />
+            </Link>
+          </p>
+        </div>
       </div>
     )
   }
 
   if (!decoded || !decoded.decodedTransactions || decoded.error) {
     return (
-      <div className="rounded-lg border border-destructive bg-destructive/10 p-8 text-center">
-        <p className="text-lg font-medium text-destructive mb-2">Invalid transaction payload</p>
-        <p className="text-sm text-destructive/80">
-          {decoded?.genesisID
-            ? "Sign payload could not be computed from the transaction data."
-            : "The transaction data in the URL could not be decoded."}{" "}
-          {"Try opening this page again via the Verify button from the transaction review dialog. "}
-          <Link
-            className="underline"
-            to="/docs/$slug"
-            params={{ slug: "verifying-transactions" }}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn more
-            <ArrowRight size={12} className="inline-block ml-0.5 -mt-0.5" />
-          </Link>
-        </p>
+      <div>
+        {backToAppButton}
+        <div className="rounded-lg border border-destructive bg-destructive/10 p-8 text-center">
+          <p className="text-lg font-medium text-destructive mb-2">Invalid transaction payload</p>
+          <p className="text-sm text-destructive/80">
+            {decoded?.genesisID
+              ? "Sign payload could not be computed from the transaction data."
+              : "The transaction data in the URL could not be decoded."}{" "}
+            {"Try opening this page again via the Verify button from the transaction review dialog. "}
+            <Link
+              className="underline"
+              to="/docs/$slug"
+              params={{ slug: "verifying-transactions" }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn more
+              <ArrowRight size={12} className="inline-block ml-0.5 -mt-0.5" />
+            </Link>
+          </p>
+        </div>
       </div>
     )
   }
@@ -132,6 +155,7 @@ function VerifyPageContent() {
 
   return (
     <div>
+      {backToAppButton}
       <h1 className="text-2xl font-bold mb-2">Verify Transaction{txCount > 1 ? "s" : ""}</h1>
       <p className="text-sm text-muted-foreground mb-6">
         This is an independent view of the transaction{txCount > 1 ? " group" : ""} an app is asking you to sign.
