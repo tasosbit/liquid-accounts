@@ -13,14 +13,19 @@ Before signing, you can independently verify a transaction through the xChain EV
 
 1. Look for a **Verify** button in the transaction review dialog
 2. Tap it any time before signing
-3. A new tab opens at `xchain.algorand.co/verify#...`, where the Portal independently decodes and displays the transaction details - check they match what you intend to do
+3. The Portal opens at `xchain.algorand.co/verify#...`, where independently decodes and displays the transaction details - check they match what you intend to do
 4. Ensure that the **transaction ID** (or **group ID**) matches the one shown by your app and wallet
 5. **Only sign if the IDs match** - reject the transaction otherwise
+6. Swtich to previous the tab when done, or tap **Back to app** if shown
+
+<div style="border-left: 3px solid black; padding-left: 1rem; margin: 1rem 0;">
+  <strong>On mobile:</strong> Use your wallet's built-in browser for the best experience - it keeps the app and wallet within the same context, so Verify works reliably.
+</div>
 
 ## Be Careful
 
 - Be suspicious of any app that doesn't show a Verify button
-- Check the verify tab's URL is `xchain.algorand.co` - the official Portal domain
+- Check the Portal URL is `xchain.algorand.co` - the official domain
 
 ## Why Verifying
 
